@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Sign = () => {
   const navigate = useNavigate();
@@ -13,13 +14,9 @@ const Sign = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/signin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
+       const res = await axios.post("http://localhost:5000/api/auth/signin", form);
 
-      const data = await res.json();
+      const data = res.data;
 
       if (res.ok) {
         localStorage.setItem("token", data.token);
@@ -35,7 +32,7 @@ const Sign = () => {
       }
     } catch (err) {
       console.error(err);
-      alert("Server error");
+      alert(err.response?.data?.message || "Login failed");
     }
   };
 
