@@ -1,0 +1,48 @@
+# === Node.js ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+pnpm-debug.log
+.env
+.env.local
+.env.*.local
+
+# === Build Artifacts (React, Express) ===
+build/
+dist/
+.next/
+
+# === Environment Files (Any Folder) ===
+*.env
+*.env.local
+
+# === Tailwind CSS ===
+*.css.map
+
+# === OS/System Files ===
+.DS_Store
+Thumbs.db
+
+# === Editor/IDE ===
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# === Logs ===
+logs/
+*.log
+
+# === Coverage / Test ===
+coverage/
+.nyc_output/
+*.lcov
+
+# === Misc ===
+*.tgz
+*.gz
+*.zip
+*.bak
+*.tmp

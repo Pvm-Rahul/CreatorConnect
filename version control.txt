@@ -1,0 +1,6 @@
+As i am modifying particular file(whether jsx/js) multiple times i need to track every version of it (to observe keenly what changes are made to it)
+
+=> for this best option is using git(version controller)
+
+1) Navigate to root of project folder
+   use command git init
