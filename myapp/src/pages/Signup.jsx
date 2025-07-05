@@ -1,64 +1,79 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const Signup = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    role: 'creator',
+const SignUp = () => {
+  const navigate = useNavigate();
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+    role: "creator",
   });
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('User Data:', formData); // Replace with API call in backend
+
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Sign up successful! Please log in.");
+        navigate("/Signin"); // Go to Sign In
+      } else {
+        alert(data.message || "Sign up failed");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Server error");
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-xl p-8 max-w-md w-full">
-        <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md w-96">
+        <h2 className="text-xl font-bold mb-4">Sign Up</h2>
 
         <input
-          name="name"
-          type="text"
-          placeholder="Name"
-          onChange={handleChange}
-          className="w-full p-2 mb-4 border rounded"
-          required
-        />
-        <input
-          name="email"
           type="email"
+          name="email"
           placeholder="Email"
+          value={form.email}
           onChange={handleChange}
-          className="w-full p-2 mb-4 border rounded"
           required
+          className="w-full mb-4 p-2 border rounded"
         />
+
         <input
-          name="password"
           type="password"
+          name="password"
           placeholder="Password"
+          value={form.password}
           onChange={handleChange}
-          className="w-full p-2 mb-4 border rounded"
           required
+          className="w-full mb-4 p-2 border rounded"
         />
 
         <select
           name="role"
-          value={formData.role}
+          value={form.role}
           onChange={handleChange}
-          className="w-full p-2 mb-6 border rounded"
+          className="w-full mb-4 p-2 border rounded"
         >
           <option value="creator">Content Creator</option>
           <option value="editor">Video Editor</option>
           <option value="writer">Content Writer</option>
         </select>
 
-        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded w-full hover:bg-blue-700">
+        <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
           Sign Up
         </button>
       </form>
@@ -66,4 +81,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default SignUp;

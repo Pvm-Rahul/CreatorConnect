@@ -1,68 +1,70 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const Signin = () => {
+const Sign = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    role: 'creator',
-  });
+  const [form, setForm] = useState({ email: "", password: "" });
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    //console.log('Login Attempt:', formData); // Backend call to verify login just for initial test
 
-    const { role } = formData;
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/signin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
-    // Redirect based on role
-    if (role === 'creator') {
-      navigate('/dashboard/creator');
-    } else if (role === 'editor') {
-      navigate('/dashboard/editor');
-    } else if (role === 'writer') {
-      navigate('/dashboard/writer');
+      const data = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("role", data.role);
+        localStorage.setItem("email", data.email);
+
+        // Redirect to dashboard based on role
+        if (data.role === "creator") navigate("/dashboard/creator");
+        else if (data.role === "editor") navigate("/dashboard/editor");
+        else if (data.role === "writer") navigate("/dashboard/writer");
+      } else {
+        alert(data.message || "Login failed");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Server error");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-xl p-8 max-w-md w-full">
-        <h2 className="text-2xl font-bold mb-6 text-center">Sign In</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <form onSubmit={handleLogin} className="bg-white p-6 rounded shadow-md w-96">
+        <h2 className="text-xl font-bold mb-4">Sign In</h2>
 
         <input
-          name="email"
           type="email"
+          name="email"
           placeholder="Email"
+          value={form.email}
           onChange={handleChange}
-          className="w-full p-2 mb-4 border rounded"
           required
+          className="w-full mb-4 p-2 border rounded"
         />
+
         <input
-          name="password"
           type="password"
+          name="password"
           placeholder="Password"
+          value={form.password}
           onChange={handleChange}
-          className="w-full p-2 mb-4 border rounded"
           required
+          className="w-full mb-4 p-2 border rounded"
         />
 
-        <select
-          name="role"
-          value={formData.role}
-          onChange={handleChange}
-          className="w-full p-2 mb-6 border rounded"
-        >
-          <option value="creator">Content Creator</option>
-          <option value="editor">Video Editor</option>
-          <option value="writer">Content Writer</option>
-        </select>
-
-        <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded w-full hover:bg-green-700">
+        <button type="submit" className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">
           Sign In
         </button>
       </form>
@@ -70,4 +72,4 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default Sign;
