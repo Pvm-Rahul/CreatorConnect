@@ -7,7 +7,7 @@ const User = require("../models/User");
 // Sign Up
 router.post("/signup", async (req, res) => {
   const { email, password, role } = req.body;
-
+  console.log("SIGNUP DATA RECIEVED:",req.body); //for debugging
   try {
     const userExists = await User.findOne({ email });
     if (userExists) return res.status(400).json({ message: "User already exists" });

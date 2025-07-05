@@ -7,7 +7,7 @@ const SignUp = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
-    role: "creator",
+    role: "",
   });
 
   const handleChange = (e) => {
@@ -16,21 +16,17 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log("Form submitting:",form);
     try {
-       const res = await axios.post("http://localhost:5000/api/auth/signin", form);
-
-      const data = res.data;
-
-      if (res.ok) {
+       const res = await axios.post("http://localhost:5000/api/auth/signup", form,{
+         headers: { "Content-Type": "application/json" },
+       });
+        if(res.ok);
         alert("Sign up successful! Please log in.");
-        navigate("/Signin"); // Go to Sign In
-      } else {
-        alert(data.message || "Sign up failed");
-      }
+        navigate("/signin"); // Go to Sign In
     } catch (err) {
       console.error(err);
-      alert("Server error");
+      alert(err.response?.data?.message || "signup failed");
     }
   };
 
@@ -65,6 +61,7 @@ const SignUp = () => {
           onChange={handleChange}
           className="w-full mb-4 p-2 border rounded"
         >
+          <option value="">Select role</option>
           <option value="creator">Content Creator</option>
           <option value="editor">Video Editor</option>
           <option value="writer">Content Writer</option>

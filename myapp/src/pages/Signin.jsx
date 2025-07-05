@@ -12,13 +12,15 @@ const Sign = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+    console.log("loggingin with:", form)
     try {
-       const res = await axios.post("http://localhost:5000/api/auth/signin", form);
+       const res = await axios.post("http://localhost:5000/api/auth/signin", form,{
+         headers: { "Content-Type": "application/json" },
+       });
 
       const data = res.data;
 
-      if (res.ok) {
+    
         localStorage.setItem("token", data.token);
         localStorage.setItem("role", data.role);
         localStorage.setItem("email", data.email);
@@ -27,9 +29,7 @@ const Sign = () => {
         if (data.role === "creator") navigate("/dashboard/creator");
         else if (data.role === "editor") navigate("/dashboard/editor");
         else if (data.role === "writer") navigate("/dashboard/writer");
-      } else {
-        alert(data.message || "Login failed");
-      }
+
     } catch (err) {
       console.error(err);
       alert(err.response?.data?.message || "Login failed");
