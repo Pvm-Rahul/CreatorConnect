@@ -19,7 +19,7 @@ const App = () => {
         <Route 
            path="/dashboard/creator" 
            element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="creator">
                <CreatorDashboard />
             </ProtectedRoute>   
             }
@@ -27,7 +27,7 @@ const App = () => {
         <Route 
            path="/dashboard/editor" 
            element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="editor">
               <EditorDashboard />
             </ProtectedRoute> 
           } 
@@ -35,7 +35,7 @@ const App = () => {
         <Route 
            path="/dashboard/writer" 
            element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="writer">
               <WriterDashboard />
             </ProtectedRoute>
           } 
