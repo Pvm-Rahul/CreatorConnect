@@ -6,7 +6,7 @@ import Signin from "./pages/Signin";
 import CreatorDashboard from './dashboards/CreatorDashboard';
 import EditorDashboard from './dashboards/EditorDashboard';
 import WriterDashboard from './dashboards/WriterDashboard';
-
+import ProtectedRoute from "./components/ProtectedRoute";
 const App = () => {
   return (
     <Router>
@@ -14,9 +14,32 @@ const App = () => {
         <Route path="/" element={<Landing />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
-        <Route path="/dashboard/creator" element={<CreatorDashboard />} />
-        <Route path="/dashboard/editor" element={<EditorDashboard />} />
-        <Route path="/dashboard/writer" element={<WriterDashboard />} />
+
+        {/* Protected Routes*/ }
+        <Route 
+           path="/dashboard/creator" 
+           element={
+            <ProtectedRoute>
+               <CreatorDashboard />
+            </ProtectedRoute>   
+            }
+        />
+        <Route 
+           path="/dashboard/editor" 
+           element={
+            <ProtectedRoute>
+              <EditorDashboard />
+            </ProtectedRoute> 
+          } 
+        />
+        <Route 
+           path="/dashboard/writer" 
+           element={
+            <ProtectedRoute>
+              <WriterDashboard />
+            </ProtectedRoute>
+          } 
+        />
       </Routes>
     </Router>
   );
